@@ -1,0 +1,46 @@
+@import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+@import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+@import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+@import url(https://fonts.googleapis.com/css?family=VT323);
+@import url(https://fonts.googleapis.com/css?family=Oswald);
+
+.remark-slide-content {
+    background-color: mistyrose !important;
+}
+
+.remark-slide-content h4 {
+    font-family: "Oswald", sans-serif;
+}
+
+.remark-slide-content p {
+    font-family: "Oswald", sans-serif;
+}
+
+.remark-slide-content img {
+    height: 25rem;
+}
+
+h1 {
+    font-family: "VT323", monospace;
+    font-weight: normal;
+}
+
+.remark-code,
+.remark-inline-code {
+    font-family: "Ubuntu Mono";
+}
+
+.link {
+    text-decoration: underline gray;
+    text-decoration-style: solid;
+
+    color: black;
+}
+
+.link-holder {
+    font-weight: normal;
+}
+
+.special-height img {
+    height: 20rem;
+}
