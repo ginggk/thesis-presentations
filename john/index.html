@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Base Camp Creature Champ Presentation</title>
+        <style>
+            :root {
+                --base-purple: rgb(158, 79, 158);
+                --base-header-size: 2.8rem;
+            }
+
+            body {
+                font-family: "Gill Sans", "Gill Sans MT", Calibri,
+                    "Trebuchet MS", sans-serif;
+            }
+
+            .cover-page {
+                color: white;
+                background-color: var(--base-purple);
+                border: 3px solid black;
+                text-align: center;
+                padding-top: 150px;
+            }
+
+            .cover-page p {
+                font-size: 2rem;
+                font-weight: 600;
+            }
+
+            .basic-page h1 {
+                font-size: var(--base-header-size);
+                color: var(--base-purple);
+            }
+
+            .basic-page li {
+                font-size: 1.7rem;
+                margin-bottom: 10px;
+            }
+
+            .basic-page p {
+                font-size: 1.7rem;
+            }
+
+            .basic-page img {
+                width: 550px;
+                display: block;
+                margin: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <textarea id="source">
+        class: cover-page
+        # Base Camp Creature Champ
+        By: John Morgan
+
+        ---
+        class: basic-page
+        # Project Goals
+        ***
+        * Display my ability to self learn.
+        * Develop a more complex React application than the last.
+        * Improve my current skills and expand my knowledge of React.
+        * Have fun creating an interesting application.
+
+        ---
+        class: basic-page
+        # What did I learn?
+        ***
+        * Comments are pretty handy
+        * Don't try and fight React (or other frameworks/libraries)
+
+        ---
+        class: basic-page
+        # What is this application?
+        ***
+        Base Camp Creature Champ is an interactive wave fighting game.
+        * What do you mean by interactive?
+            * That means that your decisions and accuracy determines how well you do.
+        * What are waves?
+            * In this application, waves are just simply the rounds you play, after you defeat an opponent, you’ll move on to the next wave.
+
+        ---
+        class: cover-page
+        # Application Run Through
+
+        ---
+        class: basic-page
+        # Starting the Application
+        ***
+        ![Image](images/startingScreen.png "")
+
+        ---
+        class: basic-page
+        # Character Selection
+        ***
+        ![Image](images/character_switch.gif "")
+
+        ---
+        class: basic-page
+        # Battle screen
+        ***
+        ![Image](images/battle_screen.gif "")
+
+        ---
+        class: basic-page
+        # Results screen
+        ***
+        ![Image](images/result_screen.png "")
+        
+    </textarea
+        >
+        <script src="remark.js"></script>
+        <script>
+            var slideshow = remark.create();
+        </script>
+    </body>
+</html>
