@@ -44,3 +44,7 @@ h1 {
 .special-height img {
     height: 20rem;
 }
+
+.qr-code img {
+    height: 15rem;
+}
