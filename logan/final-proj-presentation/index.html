@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./css/beige.css">
+    <link rel="stylesheet" href="./css/reveal.css">
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+        integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/monokai.css">
+    <title>Logan's Presentation</title>
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section data-markdown class="">
+                <textarea data-template>
+                    ## Grafitti Wall
+
+                    A project developed by: Logan Harrell
+                </textarea>
+            </section>
+            <!-- <section data-markdown>
+                <script type="text/template">
+                        - Item 1 .element: class="fragment" data-fragment-index="1" 
+                        - Item 2 .element: class="fragment" data-fragment-index="2"
+                </script>
+            </section> -->
+            <section data-markdown id="slide-1">
+                <textarea data-template>
+                ### Technologies Used
+
+                * HTML 
+                <i class="fab fa-html5" style="color: darkorange;"></i>
+                * CSS
+                <i class="fab fa-css3-alt" style="color: blue"></i>
+                * Javascript
+                <i class="fab fa-js" style="color: purple"></i>
+                * Ruby 
+                <img class="ruby-logo" src="images/ruby-icons/ruby.png"  height="35" width="35"/>
+                * Ruby on Rails
+                <object class="rails-logo" data="images/ruby-icons/iconfinder_ruby-on-rails_3069735.svg" height="35" width="35"></object>
+                * SQLite (minimal usage)
+                </textarea>
+            </section>
+            <section id="slide-2" data-markdown>
+                <textarea data-template>
+                    ### About Grafitti Wall
+                    *Painting With Friends!*
+                    <div>
+                        <i class="fas fa-user fa-3x" style="color: green;"></i>
+                        <i class="fas fa-arrows-alt-h fa-3x"></i>
+                        <i class="fas fa-users fa-3x " style="color: blue"></i>
+                    </div>
+                </textarea>
+            </section>
+            <section id="slide-3">
+                <section id="slide-3a" data-markdown>
+                    <textarea data-template>
+                        ### Main Features Implemented
+                    </textarea>
+                </section>
+                <section id="slide-3b" data-markdown>
+                    <textarea data-template>
+                                #### Drawing
+
+                                [https://laharrell20xx.github.io/js-paint/](https://laharrell20xx.github.io/js-paint/) <!-- .element: class="js-paint-link" -->
+                                <iframe class="js-paint-embed" width="100%" height="500" src="https://laharrell20xx.github.io/js-paint/"></iframe>
+                        </textarea>
+                </section>
+                <section data-markdown id="slide-3c">
+                    <textarea data-template>
+                        #### Asynchronous Changes
+                        <pre class="fragment"><code class="hljs" data-trim data-noescape data-line-numbers>
+                            stroke: (drawnPoints, tool) ->
+                                this.EligibleToSync = true
+                                @perform 'stroke', drawnPoints: drawnPoints, tool: tool
+                                </code></pre>
+                        <div><i class="fas fa-arrow-down fa-2x fragment"></i></div>
+                        <pre class="fragment"><code class="hljs" data-trim data-noescape data-line-numbers>
+                            def stroke (data)
+                                ActionCable.server.broadcast 
+                                    "paint_channel:#{params[:canvas_name]}", 
+                                    drawnPoints: data['drawnPoints'], 
+                                    tool: data['tool']
+                            end
+                                </code></pre>
+                        <div><i class="fas fa-arrow-down fa-2x fragment"></i></div>
+                        <pre class="fragment"><code class="hljs" data-trim data-noescape data-line-numbers>
+                            received: (data) ->
+                                drawLineSeg(data['drawnPoints'], data['tool'])
+                                </code></pre>
+                    </textarea>
+
+                </section>
+                <section data-markdown id="slide-3d">
+                    <textarea data-template>
+                            #### Syncing
+                            <pre class="fragment"><code class="hljs" data-trim data-noescape data-line-numbers>
+                                // Called from user subscription to InitSyncChannel in browser
+                                sendSyncRequest: ->
+                                    @perform 'send_sync_request', request_to_sync: true, canvas_name: canvasName
+                                    </code></pre>
+                            <div><i class="fas fa-arrow-down fragment"></i></div>
+                            <pre class="fragment"><code class="hljs" data-trim data-noescape data-line-numbers>
+                                    # Called from InitSyncChannel object in Ruby
+                                    def send_sync_request(data)
+                                        if ActionCable.server.connections.length < 3
+                                            close_channel
+                                        else 
+                                            ActionCable.server.broadcast 
+                                                "paint_channel:#{data['canvas_name']}", 
+                                                request_to_sync: data['request_to_sync']
+                                        end
+                                    end
+                                    </code></pre>
+                    </textarea>
+
+                </section>
+                <section data-markdown id="slide-3e">
+                    <textarea data-template>
+                            <pre class="fragment"><code class="hljs" data-trim data-noescape data-line-numbers>
+                                    received: (data) ->
+                                        if data['request_to_sync']
+                                            if this.EligibleToSync
+                                                this.syncCanvas(this.getCanvasData())
+                            </code></pre>
+                            <div><i class="fas fa-arrow-down fragment"></i></div>
+                            <pre class="fragment"><code class="hljs" data-trim data-noescape data-line-numbers>
+                                    def sync_with_initial(data)
+                                        ActionCable.server.broadcast 
+                                            "initial_canvas_sync_channel", 
+                                            canvas_data: data['canvas_data']
+                                    end
+                            </code></pre>
+                            <div><i class="fas fa-arrow-down fragment"></i></div>
+                            <pre class="fragment"><code class="hljs" data-trim data-noescape data-line-numbers>
+                                    received: (data) ->
+                                        encodedCanvasData = Uint8ClampedArray.from(data['canvas_data'])
+                                        this.setCanvas(encodedCanvasData)
+                                        @perform 'close_channel'
+                            </code></pre>
+                        </textarea>
+                </section>
+            </section>
+            <section data-markdown id="slide-4">
+                <textarea data-template>
+                            ### WebSockets and ActionCable
+                            <!-- <div class="slide-4-images">
+                                <img class="websockets" src="images/websockets.png" height="100" width="100"/>
+                                <i class="fas fa-plus fa-2x"></i>
+                                <object class="rails-logo" data="images/ruby-icons/iconfinder_ruby-on-rails_3069735.svg" height="100" width="100"></object>
+                            </div> -->
+                </textarea>
+            </section>
+            <section data-markdown id="slide-5">
+                <textarea data-template>
+                            ### What I learned
+
+                            * More about Ruby on Rails
+                            * WebSockets and Pub/Sub
+                            * Performance Optimization
+                </textarea>
+            </section>
+            <section data-markdown id="slide-6">
+                <textarea data-template>
+                    ## Thank You!
+                    [https://paint-collab.herokuapp.com](https://paint-collab.herokuapp.com) <!-- .element: class="my-link" -->
+                    [https://github.com/laharrell20XX/paint-collaboration-app](https://github.com/laharrell20XX/paint-collaboration-app)<!-- .element: class="my-link" -->
+                </textarea>
+            </section>
+        </div>
+    </div>
+
+    <script src="./js/reveal.js"></script>
+    <script src="./js/marked.js"></script>
+    <script src="./js/markdown.js"></script>
+    <script>
+        // More info about config & dependencies:
+        // - https://github.com/hakimel/reveal.js#configuration
+        // - https://github.com/hakimel/reveal.js#dependencies
+        Reveal.initialize({
+            controlsTutorial: false,
+            dependencies: [{ src: "./js/highlight.js", async: true }]
+        });
+    </script>
+</body>
+
+</html>
